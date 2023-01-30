@@ -34,6 +34,7 @@ namespace FilmesAPI5
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FilmesAPI5", Version = "v1" });
             });
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
