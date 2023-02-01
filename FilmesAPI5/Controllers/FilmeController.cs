@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using FilmesAPI5.Data;
-using FilmesAPI5.Data.Dtos;
+using FilmesAPI5.Data.Dtos.Filme;
 using FilmesAPI5.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,41 +12,41 @@ namespace FilmesAPI5.Controllers
     [Route("[controller]")]
     public class FilmeController : ControllerBase
     {
-        private FilmeContext _context;
+        private AppDbContext _context;
         private IMapper _mapper;
 
-        public FilmeController(FilmeContext context, IMapper mapper)
+        public FilmeController(AppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
+
         [HttpPost]
         public IActionResult AdicionaFilme([FromBody] CreateFilmeDto filmeDto)
         {
             Filme filme = _mapper.Map<Filme>(filmeDto);
-
             _context.Filmes.Add(filme);
             _context.SaveChanges();
             return CreatedAtAction(nameof(RecuperaFilmesPorId), new { Id = filme.Id }, filme);
         }
 
         [HttpGet]
-        public IActionResult RecuperaFilmes()
+        public IEnumerable<Filme> RecuperaFilmes()
         {
-            return Ok(_context.Filmes);
+            return _context.Filmes;
         }
 
         [HttpGet("{id}")]
         public IActionResult RecuperaFilmesPorId(int id)
         {
             Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
-            if(filme != null)
+            if (filme != null)
             {
                 ReadFilmeDto filmeDto = _mapper.Map<ReadFilmeDto>(filme);
+
                 return Ok(filmeDto);
             }
-
             return NotFound();
         }
 
@@ -55,11 +54,10 @@ namespace FilmesAPI5.Controllers
         public IActionResult AtualizaFilme(int id, [FromBody] UpdateFilmeDto filmeDto)
         {
             Filme filme = _context.Filmes.FirstOrDefault(filme => filme.Id == id);
-            if(filme == null)
+            if (filme == null)
             {
                 return NotFound();
             }
-
             _mapper.Map(filmeDto, filme);
             _context.SaveChanges();
             return NoContent();
@@ -74,7 +72,7 @@ namespace FilmesAPI5.Controllers
                 return NotFound();
             }
             _context.Remove(filme);
-            _context.SaveChanges(); 
+            _context.SaveChanges();
             return NoContent();
         }
     }

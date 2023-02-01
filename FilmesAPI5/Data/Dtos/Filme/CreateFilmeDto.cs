@@ -1,14 +1,10 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace FilmesAPI5.Data.Dtos
+namespace FilmesAPI5.Data.Dtos.Filme
 {
-    public class ReadFilmeDto
+    public class CreateFilmeDto
     {
-        [Key]
-        [Required]
-        public int Id { get; set; }
-        [Required(ErrorMessage = "O campo titulo é obrigatório")]
+        [Required(ErrorMessage = "O campo título é obrigatório")]
         public string Titulo { get; set; }
         [Required(ErrorMessage = "O campo diretor é obrigatório")]
         public string Diretor { get; set; }
@@ -16,6 +12,6 @@ namespace FilmesAPI5.Data.Dtos
         public string Genero { get; set; }
         [Range(1, 600, ErrorMessage = "A duração deve ter no mínimo 1 e no máximo 600 minutos")]
         public int Duracao { get; set; }
-        public DateTime HoraDaConsulta { get; set; }
+        public int ClassificacaoEtaria { get; set; }
     }
 }
