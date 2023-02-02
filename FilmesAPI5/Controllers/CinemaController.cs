@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FilmesAPI5.Data;
-using FilmesAPI5.Data.Dtos;
+using FilmesAPI5.Data.Dtos.Cinemas;
 using FilmesAPI5.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -32,9 +32,24 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Cinema> RecuperaCinemas([FromQuery] string nomeDoFilme)
+        public IActionResult RecuperaCinemas([FromQuery] string nomeDoFilme)
         {
-            return _context.Cinemas;
+            List<Cinema> cinemas = _context.Cinemas.ToList();
+            if(cinemas == null)
+            {
+                return NotFound();
+            }
+            if (!string.IsNullOrEmpty(nomeDoFilme))
+            {
+                IEnumerable<Cinema> query = from cinema in cinemas
+                        where cinema.Sessoes.Any(sessao => sessao.Filme.Titulo == nomeDoFilme)
+                        select cinema;
+
+                cinemas = query.ToList();
+            }
+            List<ReadCinemaDto> readDto = _mapper.Map<List<ReadCinemaDto>>(cinemas);
+
+            return Ok(readDto);
         }
 
         [HttpGet("{id}")]

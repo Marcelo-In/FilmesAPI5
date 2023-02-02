@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace FilmesAPI5.Data.Dtos.Filme
+namespace FilmesAPI5.Data.Dtos.Filmes
 {
-    public class UpdateFilmeDto
+    public class ReadFilmeDto
     {
+        [Key]
+        [Required]
+        public int Id { get; set; }
         [Required(ErrorMessage = "O campo título é obrigatório")]
         public string Titulo { get; set; }
         [Required(ErrorMessage = "O campo diretor é obrigatório")]

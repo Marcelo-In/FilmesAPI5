@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FilmesAPI5.Data;
-using FilmesAPI5.Data.Dtos.Filme;
+using FilmesAPI5.Data.Dtos.Filmes;
 using FilmesAPI5.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -32,9 +32,25 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Filme> RecuperaFilmes()
+        public IActionResult RecuperaFilmes([FromQuery] int? classificacaoEtaria = null)
         {
-            return _context.Filmes;
+            List<Filme> filmes;
+
+            if (classificacaoEtaria == null)
+            {
+                filmes = _context.Filmes.ToList();
+            }
+            else
+            {
+                filmes = _context.Filmes.Where(filme => filme.ClassificacaoEtaria <= classificacaoEtaria).ToList();
+            }
+
+            if(filmes != null)
+            {
+                List<ReadFilmeDto> readDto = _mapper.Map<List<ReadFilmeDto>>(filmes);
+                return Ok(readDto);
+            }
+            return NotFound();
         }
 
         [HttpGet("{id}")]

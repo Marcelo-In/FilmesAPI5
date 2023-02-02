@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FilmesAPI5.Data;
-using FilmesAPI5.Data.Dtos;
+using FilmesAPI5.Data.Dtos.Enderecos;
 using FilmesAPI5.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
