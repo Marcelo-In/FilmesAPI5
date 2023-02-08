@@ -21,6 +21,8 @@ namespace UsuariosApi5
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+            .ConfigureAppConfiguration((context, builder) =>
+            builder.AddUserSecrets<Program>());
     }
 }
