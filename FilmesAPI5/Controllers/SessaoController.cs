@@ -3,7 +3,9 @@ using FilmesAPI5.Data;
 using FilmesAPI5.Data.Dtos.Sessoes;
 using FilmesAPI5.Models;
 using FilmesAPI5.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Linq;
 
 namespace FilmesAPI5.Controllers
@@ -20,6 +22,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public ActionResult AdicionaSessao(CreateSessaoDto createDto) 
         {
             ReadSessaoDto readDto = _sessaoService.AdicionaSessao(createDto);
@@ -28,6 +31,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin, regular", Policy = "IdadeMinima")]
         public ActionResult RecuperaSessaoPorId(int id)
         {
             ReadSessaoDto readDto = _sessaoService.RecuperaSessaoPorId(id);

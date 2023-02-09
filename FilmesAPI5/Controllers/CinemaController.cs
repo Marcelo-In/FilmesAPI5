@@ -4,8 +4,10 @@ using FilmesAPI5.Data.Dtos.Cinemas;
 using FilmesAPI5.Models;
 using FilmesAPI5.Services;
 using FluentResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace FilmesAPI5.Controllers
@@ -21,6 +23,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public IActionResult AdicionaCinema([FromBody] CreateCinemaDto cinemaDto)
         {
             ReadCinemaDto readDto = _cinemaService.AdicionaCinema(cinemaDto);
@@ -29,6 +32,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin, regular", Policy = "IdadeMinima")]
         public IActionResult RecuperaCinemas([FromQuery] string nomeDoFilme)
         {
             List<ReadCinemaDto> readDto = _cinemaService.RecuperaCinemas(nomeDoFilme);
@@ -37,6 +41,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin, regular", Policy = "IdadeMinima")]
         public IActionResult RecuperaCinemasPorId(int id)
         {
             ReadCinemaDto readDto = _cinemaService.RecuperaCinemasPorId(id);
@@ -45,6 +50,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult AtualizaCinema(int id, [FromBody] UpdateCinemaDto cinemaDto)
         {
             Result resultado = _cinemaService.AtualizaCinema(id, cinemaDto);
@@ -54,6 +60,7 @@ namespace FilmesAPI5.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult DeletaCinema(int id)
         {
             Result resultado = _cinemaService.DeletaCinema(id);

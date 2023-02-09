@@ -5,8 +5,10 @@ using FilmesAPI5.Data.Dtos.Enderecos;
 using FilmesAPI5.Models;
 using FilmesAPI5.Services;
 using FluentResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace FilmesAPI5.Controllers
@@ -24,6 +26,7 @@ namespace FilmesAPI5.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public IActionResult AdicionaEndereco([FromBody] CreateEnderecoDto enderecoDto)
         {
             ReadEnderecoDto readDto = _enderecoService.AdicionaEndereco(enderecoDto);
@@ -32,6 +35,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin, regular", Policy = "IdadeMinima")]
         public IActionResult RecuperaEnderecos([FromQuery] string nomeDoFilme)
         {
             List<ReadEnderecoDto> readDto = _enderecoService.RecuperaEnderecos(nomeDoFilme);
@@ -40,6 +44,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin, regular", Policy = "IdadeMinima")]
         public IActionResult RecuperaEnderecosPorId(int id)
         {
             ReadEnderecoDto readDto = _enderecoService.RecuperaEnderecosPorId(id);
@@ -48,6 +53,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult AtualizaEndereco(int id, [FromBody] UpdateEnderecoDto enderecoDto)
         {
             Result resultado = _enderecoService.AtualizaEndereco(id, enderecoDto);
@@ -57,6 +63,7 @@ namespace FilmesAPI5.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult DeletaEndereco(int id)
         {
             Result resultado = _enderecoService.DeletaEndereco(id);

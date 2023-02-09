@@ -31,7 +31,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin, regular")]
+        [Authorize(Roles = "admin, regular", Policy = "IdadeMinima")]
         public IActionResult RecuperaFilmes([FromQuery] int? classificacaoEtaria = null)
         {
             List<ReadFilmeDto> readDto = _filmeService.RecuperaFilmes(classificacaoEtaria);
@@ -40,6 +40,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin, regular", Policy = "IdadeMinima")]
         public IActionResult RecuperaFilmesPorId(int id)
         {
             ReadFilmeDto readDto = _filmeService.RecuperaFilmesPorId(id);
@@ -48,6 +49,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult AtualizaFilme(int id, [FromBody] UpdateFilmeDto filmeDto)
         {
             Result resultado = _filmeService.AtualizaFilme(id, filmeDto);
@@ -56,6 +58,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult DeletaFilme(int id)
         {
             Result resultado = _filmeService.DeletaFilme(id);

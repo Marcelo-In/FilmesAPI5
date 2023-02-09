@@ -4,8 +4,10 @@ using FilmesAPI5.Data.Dtos.Gerentes;
 using FilmesAPI5.Models;
 using FilmesAPI5.Services;
 using FluentResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace FilmesAPI5.Controllers
@@ -22,6 +24,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public IActionResult AdicionaGerente([FromBody] CreateGerenteDto gerenteDto)
         {
             ReadGerenteDto readDto = _gerenteService.AdicionaGerente(gerenteDto);
@@ -30,6 +33,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin, regular", Policy = "IdadeMinima")]
         public IActionResult RecuperaGerentes([FromQuery] string nomeDoFilme)
         {
             List<ReadGerenteDto> readDto = _gerenteService.RecuperaGerentes(nomeDoFilme);
@@ -38,6 +42,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin, regular", Policy = "IdadeMinima")]
         public IActionResult RecuperaGerentesPorId(int id)
         {
             ReadGerenteDto readDto = _gerenteService.RecuperaGerentesPorId(id);
@@ -46,6 +51,7 @@ namespace FilmesAPI5.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult AtualizaGerente(int id, [FromBody] UpdateGerenteDto gerenteDto)
         {
             Result resultado = _gerenteService.AtualizaGerente(id, gerenteDto);
@@ -55,6 +61,7 @@ namespace FilmesAPI5.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult DeletaGerente(int id)
         {
             Result resultado = _gerenteService.DeletaGerente(id);
